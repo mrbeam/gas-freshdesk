@@ -1,4 +1,7 @@
 # GasFreshdesk - OO Class for Freshdesk API(v2)
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/zixia/gas-freshdesk.svg)](https://greenkeeper.io/)
+
 GasFreshdesk is a simple Freshdesk API Class for GAS(Google Apps Script)
 
 Github: https://github.com/zixia/gas-freshdesk
