@@ -111,19 +111,26 @@ var GasFreshdesk = (function () {
     *
     */
     function freshdeskListTickets(options) {
-      
-      var data
-      
+
+      var url = '/api/v2/tickets?' // Uses the new_and_my_open filter.
+
       if (options && options.email) { // Requester email
         var email = validateEmail(options.email)
-        data = http.get('/api/v2/tickets?order_by=created_at&order_type=asc&email=' + encodeURIComponent(email))
+        url = '/api/v2/tickets?order_by=created_at&order_type=asc&email=' + encodeURIComponent(email)
       } else if (options && options.requester_id) {
         var requesterId = validateInteger(options.requester_id)
-        data = http.get('/api/v2/tickets?order_by=created_at&order_type=asc&requester_id=' + requesterId)
-      }else { // Uses the new_and_my_open filter.
-        data = http.get('/api/v2/tickets')
-        
+        url = '/api/v2/tickets?order_by=created_at&order_type=asc&requester_id=' + requesterId
+      } else if (options && options.updated_since) {
+        url = '/api/v2/tickets?order_by=updated_at&order_type=desc&updated_since=' + Utilities.formatDate(options.updated_since, "UTC", "yyyy-MM-dd'T'HH:mm:ss'Z'")
       }
+      if (options && options.api_params && typeof options.api_params == "object") {
+        for (var key in options.api_params) {
+           url += "&" + key + "=" + encodeURIComponent(options.api_params[key])
+        }
+      }
+
+      Logger.log("freshdeskListTickets: url: " + url)
+      var data = http.get(url)
       
       if (!data || !data.length) return []
       
